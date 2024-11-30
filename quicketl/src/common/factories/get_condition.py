@@ -3,28 +3,35 @@
 A condition is a combination of multiple predicates.
 """
 
-from typing import List
+from typing import Any, Dict, List
 from quicketl.src.common.dtos.time_travel.condition import Condition
 from quicketl.src.common.dtos.time_travel.predicate import (
     Predicate,
 )
-from quicketl.src.common.factories.get_predicate import get_predicate
-from quicketl.src.common.utils import get_operator
+from quicketl.src.common.factories.get_predicate import (
+    get_predicate_from_text_predicate,
+)
 
 
-def get_condition(predicates: List[Predicate]) -> Condition:
-    return Condition(**{"predicates": predicates})
+def get_condition(predicates: List[Dict[Any, Any] | Predicate]) -> Condition:
+
+    for predicate in predicates:
+        if not isinstance(predicate, Predicate) and not isinstance(
+            predicate, dict
+        ):
+            raise
+
+    try:
+        return Condition(**{"predicates": predicates})
+    except Exception as e:
+        raise
 
 
 def get_condition_from_text_predicates(predicates: List[str]):
     _predicates = []
     for predicate in predicates:
-        operator = get_operator(predicate)
-        splitted = filter.split(operator)
-        target = splitted[0]
-        value = splitted[1]
         _predicates.append(
-            get_predicate(column_name=target, operator=operator, value=value)
+            get_predicate_from_text_predicate(predicate=predicate)
         )
 
     return get_condition(predicates=_predicates)
@@ -47,3 +54,11 @@ def get_condition_from_text_conditions(
         )
 
     return _conditions
+
+
+def join_conditions(conditions: List[Condition]):
+
+    joined = " OR\n".join(
+        [condition.multi_predicate for condition in conditions]
+    )
+    return f"({joined})"

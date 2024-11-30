@@ -4,7 +4,7 @@ from quicketl.src.common.dtos.contracts.column import DateColumn
 
 class AvailableDateColumns:
     """
-    Informs which formats are available
+    Informs which date formats are available in a contract
     """
 
     _date: Optional[DateColumn]

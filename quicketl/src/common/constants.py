@@ -54,3 +54,15 @@ class SparkType(Enum):
     MapType = "MapType"
     StructField = "StructField"
     StructType = "StructType"
+
+
+class ContractType(Enum):
+    CONFIG = "Config"
+    PROCESSING = "Processing"
+    INPUT = "Input"
+    OUTPUT = "Output"
+
+
+class InternalMode(Enum):
+    TEST_1 = "Test_1"
+    TEST_2 = "Test_2"

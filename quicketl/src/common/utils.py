@@ -1,4 +1,5 @@
 from enum import Enum
+import os
 from typing import Any, List
 
 from pydantic import BaseModel
@@ -37,3 +38,9 @@ def get_operator(filter_as_text: str) -> str:
     operator = look_for_in_enum(value=filter_as_text, enumerate=Operator)
 
     return operator.value
+
+
+def get_src_path():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
+
+    return path
